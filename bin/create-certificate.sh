@@ -41,6 +41,6 @@ pushd "${__DIR}/ca/intermediate"
         -in "certs/${CN}.cert.pem"
   openssl verify -CAfile "certs/ca-chain.cert.pem" \
         "certs/${CN}.cert.pem"
-  echo "Creating ${__DIR}/ca/intermediate${CN}.tar with private key and certificates: ${CN} and CA chain..."
+  echo "Creating ${__DIR}/ca/intermediate/${CN}.tar with private key and certificates: ${CN} and CA chain..."
   tar cf "${CN}.tar" "certs/${CN}.cert.pem" "private/${CN}.key.pem" "certs/ca-chain.cert.pem"
 popd

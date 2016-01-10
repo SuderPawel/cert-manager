@@ -20,10 +20,12 @@ if [ ! -d "${__DIR}/ca/intermediate" ]; then
 fi
 
 pushd "${__DIR}/ca/intermediate"
-  echo "Updating intermediate CA configuration..."
-  sed -i 's#\[\s+server\_cert\s+\]#[ server_cert ]\ncrlDistributionPoints = URI:$'${CRL_URL}'#g' openssl.cnf
-  echo "Creating CRL..."
-  openssl ca -config openssl.cnf -gencrl -out crl/intermediate.crl.pem
+  if ! grep -q crlDistributionPoints openssl.cnf; then
+    echo "Updating intermediate CA configuration..."
+    sed -i 's#\[ server_cert \]#[ server_cert ]\ncrlDistributionPoints = URI:'${CRL_URL}'#g' openssl.cnf
+    echo "Creating CRL..."
+    openssl ca -config openssl.cnf -gencrl -out crl/intermediate.crl.pem
+  fi
   echo "Checking CRL..."
   openssl crl -in crl/intermediate.crl.pem -noout -text
 popd

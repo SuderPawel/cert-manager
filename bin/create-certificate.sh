@@ -8,15 +8,20 @@ export __DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export __DIR="$( dirname ${__DIR} )"
 
 CN=${1}
+EXTENSIONS=${2}
 
 if [ -z "${CN}" ]; then
-    echo "Usage: ${0} <commonName>"
+    echo "Usage: ${0} <commonName> (<extensions>)"
     exit -1
 fi
 
 if [ ! -d "${__DIR}/ca/intermediate" ]; then
     echo "Intermediate CA does not exist!"
     exit -1
+fi
+
+if [ -z "${EXTENSIONS}" ]; then
+    EXTENSIONS=server_cert
 fi
 
 pushd "${__DIR}/ca/intermediate"
@@ -36,7 +41,7 @@ pushd "${__DIR}/ca/intermediate"
   if [ ! -f "certs/${CN}.cert.pem" ]; then
     echo "Singing CSR by intermediate CA - you will be asked for password to intermediate CA private key"
     openssl ca -config "openssl.cnf" \
-          -extensions server_cert -days 375 -notext -md sha256 \
+          -extensions ${EXTENSIONS} -days 375 -notext -md sha256 \
           -in "csr/${CN}.csr.pem" \
           -out "certs/${CN}.cert.pem"
     echo "Setting permissions..."

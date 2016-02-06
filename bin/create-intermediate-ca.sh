@@ -56,8 +56,8 @@ pushd "${__DIR}/ca/intermediate"
   openssl verify -CAfile ../certs/ca.cert.pem \
       certs/intermediate.cert.pem
   echo "Creating CA chain..."
-  cat certs/intermediate.cert.pem \
-      ../certs/ca.cert.pem > certs/ca-chain.cert.pem
+  cat ../certs/ca.cert.pem \
+       certs/intermediate.cert.pem > certs/ca-chain.cert.pem
   echo "Setting permissions..."
   chmod 444 certs/ca-chain.cert.pem
 popd

@@ -36,6 +36,8 @@ pushd "${__DIR}/ca"
         -key private/ca.key.pem \
         -new -x509 -days 7300 -sha256 -extensions v3_ca \
         -out certs/ca.cert.pem
+  echo "Setting permissions..."
+  chmod 444 certs/ca.cert.pem
   echo "Verifying certificate..."
   openssl x509 -noout -text -in certs/ca.cert.pem
 popd
